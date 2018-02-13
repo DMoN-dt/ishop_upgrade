@@ -1,0 +1,4 @@
+# redis:             redis-server
+# sidekiq_worker:    /home/depuser/.rbenv/bin/rbenv exec bundle exec sidekiq -e production
+
+web:                 /home/depuser/.rbenv/bin/rbenv exec bundle exec puma -p 5000

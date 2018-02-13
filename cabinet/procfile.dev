@@ -1,0 +1,7 @@
+# redis:             redis-server
+# sidekiq_worker:  /home/depuser/.rbenv/bin/rbenv exec bundle exec sidekiq
+
+backend:           /home/depuser/.rbenv/bin/rbenv exec bundle exec rails s puma -b 127.0.0.1 -p 5020
+
+# watcher:         /home/depuser/.rbenv/bin/rbenv exec webpack-watcher
+frontend:          /home/depuser/.rbenv/bin/rbenv exec webpack-dev-server -p 5021

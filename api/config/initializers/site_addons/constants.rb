@@ -1,0 +1,1 @@
+require File.expand_path('../../../../.general/config/initializers/constants', __dir__)

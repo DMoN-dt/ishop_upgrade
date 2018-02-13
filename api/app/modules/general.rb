@@ -1,0 +1,1 @@
+require PROJECT_HOME_PATH_GENERAL + 'modules/market/marketplace'

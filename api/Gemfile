@@ -1,0 +1,136 @@
+source 'https://rubygems.org'
+ruby "~> 2.4.1"
+
+# git_source(:github) do |repo_name|
+#   repo_name = "#{repo_name}/#{repo_name}" unless repo_name.include?("/")
+#   "https://github.com/#{repo_name}.git"
+# end
+
+
+# Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
+gem 'rails', '~> 5.1.4'
+# Use Puma as the app server
+gem 'puma', '~> 3.7'
+# Build JSON APIs with ease. Read more: https://github.com/rails/jbuilder
+# gem 'jbuilder', '~> 2.5'
+# Use ActiveModel has_secure_password
+# gem 'bcrypt', '~> 3.1.7'
+
+# Use Capistrano for deployment
+# gem 'capistrano-rails', group: :development
+
+# Support for Cross-Origin Resource Sharing (CORS) to allow cross domain AJAX calls without using workarounds such as JSONP.
+# NGINX do it better.
+# gem 'rack-cors', :require => 'rack/cors'
+
+# Databases
+gem 'pg'
+#gem 'pg_search'
+#gem 'activerecord-hierarchical_query' #, require: 'active_record/hierarchical_query'
+#gem 'composite_primary_keys', '=10.x.x' # for rails 5.1, v10xxx not yet available
+#gem 'active_model_serializers', '~> 0.10.0'
+gem 'will_paginate'
+
+# Use Redis adapter to run Action Cable in production
+# gem 'redis', '~> 3.0'
+
+# Schedulers
+# gem 'sidekiq'
+# gem 'sidekiq-scheduler'
+
+# Internationalization
+#gem 'unicode_utils'
+#gem 'rails-i18n'
+#gem 'ru_propisju'
+#gem 'russian'
+# gem 'route_translator'
+# gem 'http-accept'
+
+
+# Detect GeoPosition by IP
+# gem 'maxmind_geoip2'
+
+# Some Addons
+# gem 'recaptcha' # Google ReCaptcha
+gem 'xxhash'
+gem 'browser'
+# gem 'xml-sitemap'
+
+# Images, Photos
+gem 'paperclip'
+#gem 'paperclip-i18n'
+gem 'paperclip-optimizer'
+gem 'image_optim_pack'
+#gem 'photoswipe-rails'
+#gem 'delayed_paperclip'
+#gem 'paperclip-watermark'
+#gem "mini_magick"
+#gem 'rmagick'
+#gem 'inline_svg'
+
+# External Files support
+gem 'roo' # Excel files read
+gem 'roo-xls' # Excel-2003
+gem 'wicked_pdf' # html to pdf convert
+gem 'wkhtmltopdf-binary' # html to pdf converter binaries
+
+# Authorization gems
+# gem 'oauth2'
+gem 'devise'
+gem 'devise-i18n'
+# gem "devise_invitable"
+gem 'pundit'
+# gem 'pundit_namespaces'
+# gem 'omniauth'
+# gem 'omniauth-vkontakte'
+# gem 'omniauth-yandex'
+# gem 'omniauth-odnoklassniki'
+# gem 'omniauth-mail_ru'
+# gem 'omniauth-google-oauth2'
+# gem 'omniauth-facebook'
+# gem 'vkontakte_api'
+# gem "switch_user"
+
+# Own OAuth2 Authorization
+gem 'doorkeeper'
+gem 'doorkeeper-jwt'
+gem 'doorkeeper-i18n'
+# gem 'devise-doorkeeper'
+
+
+group :development, :test do
+  gem 'rspec-rails', '~> 3.6'
+  
+  # Call 'byebug' anywhere in the code to stop execution and get a debugger console
+  gem 'byebug', platforms: [:mri, :mingw, :x64_mingw]
+end
+
+group :development do
+  gem 'listen', '>= 3.0.5', '< 3.2'
+  # Spring speeds up development by keeping your application running in the background. Read more: https://github.com/rails/spring
+  gem 'spring'
+  gem 'spring-watcher-listen', '~> 2.0.0'
+  
+  # Use Capistrano for deployment
+  # gem 'capistrano-rails'
+  # gem 'mina', require: false
+end
+
+group :test do
+  gem 'rails-controller-testing'
+  gem 'factory_bot_rails'
+  gem 'shoulda-matchers'
+  #gem 'database_cleaner' # It literally cleans our test database to ensure a clean state in each test suite.
+  
+  # Adds support for Capybara system testing and selenium driver
+  gem 'capybara', '~> 2.13'
+  gem 'selenium-webdriver'
+  
+  gem 'simplecov', :require => false
+  
+  # Generate fake data
+  gem 'faker'
+end
+
+# Windows does not include zoneinfo files, so bundle the tzinfo-data gem
+gem 'tzinfo-data', platforms: [:mingw, :mswin, :x64_mingw, :jruby]

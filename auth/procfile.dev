@@ -1,0 +1,4 @@
+# redis:             redis-server
+# sidekiq_worker:    ./bin/bundle exec sidekiq
+
+backend:             /home/depuser/.rbenv/bin/rbenv exec bundle exec rails s puma -b 127.0.0.1 -p 5000
