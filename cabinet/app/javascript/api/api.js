@@ -27,7 +27,7 @@ export default({
   
   async apiQuery (context, method, url, url_params, data, {vApp, with_token, token, skip_stored_token, notify_on_error, with_json_accept, with_user_token} = {}) {
 	// Default params
-	if(typeof vApp         == 'undefined')vApp = context.rootState.App;
+	if(!vApp)vApp = context.rootState.App;
 	if(typeof with_token   == 'undefined')with_token = true;
 	if(typeof token        == 'undefined')token      = 'none';
 	if(typeof skip_stored_token == 'undefined')skip_stored_token = false;
@@ -118,7 +118,7 @@ export default({
 			return this.a.apiQuery(context, 'get', `measure_units/`, data)
 		  },
 		  
-		  show: (context, id = null, {code}) => {
+		  show: (context, id = null, {code} = {}) => {
 			if(id)id = 'I' + id;
 			else if(code)id = '0C' + code;
 			else return {errors: ['ID is not defined']}
@@ -157,8 +157,10 @@ export default({
 	  
 	  products: {
 		  fetchList: (context, {start, maxcnt, order, get_total, subnode_id, params}) => {
-			let data = {limit_num: maxcnt}
+			if(typeof subnode_id == 'undefined')return {errors: null};
 			
+			let data = {limit_num: maxcnt}
+
 			if(order)data['order'] = order;
 			if(start)data['start_point'] = start;
 			if(get_total)data['get_total'] = get_total;
@@ -168,22 +170,75 @@ export default({
 			return this.a.apiQuery(context, 'get', `sellers/${params.seller_id}/prodgroups/${subnode_id}/products/`, data)
 		  },
 		  
-		  createNew: (context, list, {seller_id}) => {
-			return this.a.apiQuery(context, 'post', `sellers/${seller_id}/products/`, null, {list})
-		  },
-		  
 		  show: (context, id, {seller_id}) => {
 			if(typeof seller_id == 'undefined')seller_id = null;
 			return this.a.apiQuery(context, 'get', `sellers/${seller_id}/products/${id}/`, null, null, {notify_on_error: false})
 		  },
 		  
-		  destroy: (context, id, data, seller_id = null) => {
-			return this.a.apiQuery(context, 'delete', `sellers/${seller_id}/products/${id}/`, null, data, {notify_on_error: false})
+		  createNew: (context, list, {seller_id, group_id}) => {
+			return this.a.apiQuery(context, 'post', `sellers/${seller_id}/prodgroups/${group_id}/products/`, null, {list})
+		  },
+		  
+		  update: (context, id, {seller_id, group_id, changes}) => {
+			if(!group_id || !changes)return;
+			if(typeof seller_id == 'undefined')seller_id = null;
+			return this.a.apiQuery(context, 'patch', `sellers/${seller_id}/prodgroups/${group_id}/products/${id}/`, null, {changes})
+		  },
+		  
+		  destroy: (context, id, data, group_id, seller_id = null) => {
+			return this.a.apiQuery(context, 'delete', `sellers/${seller_id}/prodgroups/${group_id}/products/${id}/`, null, data, {notify_on_error: false})
+		  },
+		  
+		  fetchImages: (context, id, {seller_id, id_array}) => {
+			if(typeof seller_id == 'undefined')seller_id = null;
+			if((typeof id_array == 'undefined') && (typeof id == 'number'))id_array = [id];
+			
+			return this.a.apiQuery(context, 'post', `sellers/${seller_id}/products/images`, null, {id_array}, {notify_on_error: false})
+		  },
+		  
+		  fetchSuppliers: (context, {start, maxcnt, order, get_total, subnode_id, params}) => {
+			let data = {limit_num: maxcnt}
+			
+			if(start)data['start_point'] = start;
+			if(get_total)data['get_total'] = get_total;
+			if(!params)params = {seller_id: null}
+			
+			return this.a.apiQuery(context, 'post', `sellers/${params.seller_id}/products/${subnode_id}/suppliers`, null, data, {notify_on_error: false})
+		  },
+		  
+		  fetchInStock: (context, {start, maxcnt, order, get_total, subnode_id, params}) => {
+			let data = {limit_num: maxcnt}
+			
+			if(start)data['start_point'] = start;
+			if(get_total)data['get_total'] = get_total;
+			if(!params)params = {seller_id: null}
+			
+			return this.a.apiQuery(context, 'post', `sellers/${params.seller_id}/products/${subnode_id}/instock`, null, data, {notify_on_error: false})
+		  },
+		  
+		  fetchPricingMath: (context, {start, maxcnt, order, get_total, subnode_id, params}) => {
+			let data = {limit_num: maxcnt}
+			
+			if(start)data['start_point'] = start;
+			if(get_total)data['get_total'] = get_total;
+			if(!params)params = {seller_id: null}
+			
+			return this.a.apiQuery(context, 'post', `sellers/${params.seller_id}/products/${subnode_id}/pricing_math`, null, data, {notify_on_error: false})
+		  },
+		  
+		  fetchFixedPrices: (context, {start, maxcnt, order, get_total, subnode_id, params}) => {
+			let data = {limit_num: maxcnt}
+			
+			if(start)data['start_point'] = start;
+			if(get_total)data['get_total'] = get_total;
+			if(!params)params = {seller_id: null}
+			
+			return this.a.apiQuery(context, 'post', `sellers/${params.seller_id}/products/${subnode_id}/fixed_prices`, null, data, {notify_on_error: false})
 		  },
 	  },
 	  
 	  brands: {
-		  fetchList: (context, {start, maxcnt, order, get_total, params} = {seller_id: null}) => {
+		  fetchList: (context, {start, maxcnt, order, get_total, params}) => {
 			let data = {limit_num: maxcnt}
 			if(order)data['order'] = order;
 			if(start)data['start_point'] = start;
@@ -204,6 +259,68 @@ export default({
 		  
 		  destroy: (context, id, data, seller_id = null) => {
 			return this.a.apiQuery(context, 'delete', `sellers/${seller_id}/brands/${id}/`, null, data, {notify_on_error: false})
+		  },
+	  },
+	  
+	  pricing_prices: {
+		  fetchList: (context, {start, maxcnt, order, get_total, subnode_id, params}) => {
+			let data = {limit_num: maxcnt}
+
+			if(order)data['order'] = order;
+			if(start)data['start_point'] = start;
+			if(get_total)data['get_total'] = get_total;
+			if(!params)params = {seller_id: null}
+			
+			return this.a.apiQuery(context, 'get', `sellers/${params.seller_id}/pricing_prices/`, data, null, {notify_on_error: false})
+		  },
+		  
+		  getInfo: (context, id, {seller_id, id_array}) => {
+			if(typeof seller_id == 'undefined')seller_id = null;
+			return this.a.apiQuery(context, 'post', `sellers/${seller_id}/pricing_prices/info`, null, {id_array}, {notify_on_error: false})
+		  },
+	  },
+	  
+	  pricing_rules: {
+		  fetchList: (context, {start, maxcnt, order, get_total, subnode_id, params}) => {
+			let data = {limit_num: maxcnt}
+
+			if(order)data['order'] = order;
+			if(start)data['start_point'] = start;
+			if(get_total)data['get_total'] = get_total;
+			if(!params)params = {seller_id: null}
+			
+			return this.a.apiQuery(context, 'get', `sellers/${params.seller_id}/pricing_rules/`, data, null, {notify_on_error: false})
+		  },
+		  
+		  getInfo: (context, id, {seller_id, id_array}) => {
+			if(typeof seller_id == 'undefined')seller_id = null;
+			return this.a.apiQuery(context, 'post', `sellers/${seller_id}/pricing_rules/info`, null, {id_array}, {notify_on_error: false})
+		  },
+	  },
+	  
+	  pricing_fixed: {
+		  fetchList: (context, {start, maxcnt, order, get_total, subnode_id, params}) => {
+			let data = {limit_num: maxcnt}
+
+			if(order)data['order'] = order;
+			if(start)data['start_point'] = start;
+			if(get_total)data['get_total'] = get_total;
+			if(!params)params = {seller_id: null}
+			
+			return this.a.apiQuery(context, 'get', `sellers/${params.seller_id}/pricing_fixed/`, data, null, {notify_on_error: false})
+		  },
+	  },
+	  
+	  pricing_maths: {
+		  fetchList: (context, {start, maxcnt, order, get_total, subnode_id, params}) => {
+			let data = {limit_num: maxcnt}
+
+			if(order)data['order'] = order;
+			if(start)data['start_point'] = start;
+			if(get_total)data['get_total'] = get_total;
+			if(!params)params = {seller_id: null}
+			
+			return this.a.apiQuery(context, 'get', `sellers/${params.seller_id}/pricing_maths/`, data, null, {notify_on_error: false})
 		  },
 	  },
 	  
